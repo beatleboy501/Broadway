@@ -1,9 +1,9 @@
 class PlaysController < ApplicationController
 
-  before_action :find_plays, only: [:show, :edit, :update, :destroy]
+  before_action :find_play, only: [:show, :edit, :update, :destroy]
 
   def index
-    @plays = Play.all.order("created_at DESC")
+    @plays = Play.all.order('created_at DESC')
   end
 
   def show
@@ -23,12 +23,21 @@ class PlaysController < ApplicationController
     end
   end
 
-  def update
+  def edit
 
   end
 
-  def destroy
+  def update
+    if @play.update(play_params)
+      redirect_to play_path(@play)
+    else
+      render 'edit'
+    end
+  end
 
+  def destroy
+    @play.destroy
+    redirect_to root_path
   end
 
   private
@@ -37,7 +46,7 @@ class PlaysController < ApplicationController
     params.require(:play).permit(:title, :description, :director)
   end
 
-  def find_plays
+  def find_play
     @play = Play.find(params[:id])
   end
 end
